@@ -1,31 +1,81 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import axios from '../constants/axios'
 import Button from 'react-bootstrap/Button';
 
 
 import Navigation from './Navigation'
+import Searchfilter from './Searchfilter';
+
+import { toast } from 'react-toastify';
 
 const Home = () => {
+  const navigation = useNavigate()
   const [data,Setdata] = useState([])
+  const [genre,setGenre] = useState('')
+  const [releaseDate,SetreleaseDate] = useState('')
+  const [Moviename,Setmoviename] = useState('')
+  const [filtereddata,SetfilteredData] = useState([])
+
+  const handleFilter = () => {
+    // console.log('Original Data:', data);
+    // console.log('Filter Conditions - Genre:', genre, 'Release Date:', releaseDate, 'Movie Name:', Moviename);
+
+    const result = data.filter(movie => {
+      const year = movie.releaseDate.split('-')[0];
+
+      const matchGenre = !genre || movie.genre.id == genre;
+      const matchReleaseDate = !releaseDate || year == releaseDate;
+      const matchMovieName = !Moviename || movie.title.toLowerCase().includes(Moviename.toLowerCase());
+
+      return matchGenre && matchReleaseDate && matchMovieName
+    })
+
+    SetfilteredData(result)
+
+
+
+  }
+
+
 
   useEffect(() => {
-    axios.get('auth/approvalmovies/')
-    .then((res) => {
-      if(res.status == 200){
-        Setdata(res.data)
-      }
-    })
-  },[data])
+   
+
+    try {
+      axios.get('auth/approvalmovies/')
+      .then((res) => {
+        if(res.status == 200){
+          Setdata(res.data)
+          SetfilteredData(res.data)
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    
+  },[])
+
+
   return (
     <div>
     <Navigation />
     <br/>
     <div className='container mt-5'>
       <div className="row">
+      <Searchfilter 
+      genre={genre}
+      setGenre={setGenre}
+      releaseDate={releaseDate}
+      SetreleaseDate={SetreleaseDate}
+      Moviename={Moviename}
+      Setmoviename={Setmoviename}
+      handleFilter={handleFilter}
+      />
       {
-        data.map((item,index) => (
+        filtereddata.map((item,index) => (
           <div className="col-md-3" key={index}>
             <div className="card">
               <img src={item.banner} 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../constants/axios'
 
-
+import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Navigation from './Navigation'
 
 const Movies = () => {
+    const navigation = useNavigate()
     const userid  = localStorage.getItem('userId')
     const initalformdata = {
         title:'',
@@ -156,6 +157,13 @@ const Movies = () => {
     }
 
     useEffect(() => {
+      var access_token = localStorage.getItem('access_token')
+      if(!access_token){
+          toast.success("Session Expired,Login Now",{
+              position:'bottom-center'
+          });
+          navigation('/login')
+      }
       ListGenres()
       movieslist()
     },[])

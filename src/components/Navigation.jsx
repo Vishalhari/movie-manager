@@ -19,30 +19,38 @@ const Navigation = () => {
 
   const userlogout = ()=> {
     const refresh = localStorage.getItem('refresh_token')
-    try {
-      axios.post('auth/logout/',{
-        refresh_token:refresh
-      },
-      {
-        headers:{
-          'Content-Type': 'application/json'
+    const accesstoken = localStorage.getItem('access_token')
+
+    if(accesstoken == null){
+      localStorage.clear()
+      axios.defaults.headers.common['Authorization'] = null
+      navigation('/login')
+    } else {
+      try {
+        axios.post('auth/logout/',{
+          refresh_token:refresh
+        },
+        {
+          headers:{
+            'Content-Type': 'application/json'
+          }
         }
+      )
+        localStorage.clear()
+        axios.defaults.headers.common['Authorization'] = null
+        navigation('/login')
+      } catch (e) {
+        console.log('logout not working', e)
       }
-    
-    )
-    localStorage.clear()
-    axios.defaults.headers.common['Authorization'] = null
-    navigation('/login')
-    } catch (e) {
-      console.log('logout not working', e)
     }
+    
     
 }
   return (
     <div>
     <Navbar expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
       <Container>
-        <Navbar.Brand href="#home">Movies App</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">Movies App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
