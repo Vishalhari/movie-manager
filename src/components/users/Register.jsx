@@ -29,6 +29,19 @@ function Register() {
     }
     const handlesubmit = async(e) => {
         e.preventDefault();
+        if(Formdata.password.length <=8){
+            toast.error('Password must be at least 8 characters long.',{
+                position:'bottom-center'
+            })
+            return;
+        } 
+
+        if(Formdata.password != Formdata.password2){
+            toast.error('Password and Confirm Password should be same',{
+                position:'bottom-center'
+            })
+            return;
+        }
         try {
             await axios.post('auth/register/',Formdata)
             .then((res) => {

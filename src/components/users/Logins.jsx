@@ -36,7 +36,6 @@ const Logins = () => {
       },
     )
       .then((res)=> {
-        console.log(res);
         if(res.status == 200){
           localStorage.clear()
           localStorage.setItem('access_token',res.data.access)

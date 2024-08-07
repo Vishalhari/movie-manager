@@ -213,7 +213,6 @@ const Movies = () => {
       try {
         await axios.put(`auth/moviesupdate/${Editdata.id}/`,Formdateupd)
         .then((res) => {
-          console.log(res)
           if(res.status==200){
             Seteditdata(initaleditformdata)
             Setedit(false)
@@ -393,7 +392,7 @@ const Movies = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formemployeename">
-        <Form.Label>Trailer</Form.Label>
+        <Form.Label>Video Id</Form.Label>
         <Form.Control 
         type="text" 
         name='trailerLink'
@@ -504,7 +503,7 @@ const Movies = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formemployeename">
-        <Form.Label>Trailer</Form.Label>
+        <Form.Label>Video Id</Form.Label>
         <Form.Control 
         type="text" 
         name='trailerLink'
